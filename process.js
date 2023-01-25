@@ -1,6 +1,6 @@
 console.log(process.argv);
 
-process.stdout.write("wHAT'S YOUR NAME?")
+process.stdout.write("WHAT IS YOUR NAME?")
 
 process.stdin.on('data', function(answer){
 
