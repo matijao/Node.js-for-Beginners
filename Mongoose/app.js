@@ -1,101 +1,131 @@
-// const MongoClient = require("mongodb").MongoClient; 
-// enako tudi: const {MongoClient} = require("mongodb");
+const mongoose = require("mongoose");
+const User = require("./models/User");
+const express = require("express");
+const app = express();
+const bodyParser = require ("body-parser");
 
-const {MongoClient, ObjectId} = require("mongodb");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
-MongoClient.connect("mongodb://localhost:27017", function (err, client){
-  
-  if(err) throw err;
-
-  //console.log(ObjectId());
-
-  // const object = new ObjectId();
-
- // console.log(object);
-
-  console.log("Connected");
-  
-
-  // -- KOMENTAR -- Mongoose poskrbi za strukturo 'schema', prvotno pa je mongodb 'schemaless, kar pomeni, da lahko pišeš v bazo karkoli
+mongoose.Promise = global.Promise;
 
 
-  const db = client.db("animals");
-/* 
-// -- CREATE DATA --
-  db.collection("mammals").insertOne({
-    name: "cat",
-    legs: 4
+mongoose.connect("mongodb://localhost:27017/mongoose");
+mongoose.connection
+    .once("open", () => console.log("Connected"))
+    .on("error", (err) => {
+        console.log("could not connect", err)
+    });
 
-  }, (err,result) => {
-    if(err) {return console.log(err)}
+// app.post("/users");
 
-    console.log("Inserted");
-*/
- // });  
+app.get("/", (req, res) => {
 
+  res.send("ROOT")
 
+});
 
+app.post("/users", (req, res) => {
 
+const newUser = new User({
+  firstName: req.body.firstName,
+  lastName: req.body.lastName,
+  isActive: req.body.isActive,
+});
 
-/* mongoose.connection
-  .once("open", () => console.log("Connected"))
-  .on("error", (err) => {
-    console.log("Could not connect", err);
-  }); */
+newUser.save().then(savedUser => {
 
+  console.log("saved user");
+  res.send("User saved");
 
-/* const MongoClient = require('mongodb').MongoClient
-
-MongoClient.connect('mongodb://localhost:27017/animals', (err, db) => {
-  if (err) throw err */
-
-
-
-
-  
-
-// -- UPDATE DATA --
-/*   db.collection('mammals').findOneAndUpdate({
-
-    _id: new ObjectId("63dac1a7bc2e325758cf3fb4")
-
-
-  //})
-  }, { $set: {name: "tiger", legs: 4} 
-
-  }).then(result => {
-    console.log(result);
-  }).catch(err => {
-    console.log(err);
-  }); */
-
-
-
-
-// -- DELETING DATA --
-// db.collection("mammals").deleteMany({name: "Matija"});
-
-db.collection("mammals").findOneAndDelete({
-  _id: new ObjectId("63dac308f65d501388ae4110")
-}).then(result => {
-  console.log(result);
 }).catch(err => {
-  console.log(err);
+
+  res.status(404).send("User not saved");
+
+});
+
+
+});
+
+
+
+// -- GET DATA FROM DB
+app.get("/users", (req, res) => {
+  User.find({}).then(users => {// findOne() -> find specific record/document
+    res.send(users);
+  
+  });
+
+});
+
+// -- PATCH or PUT    //PUT[all fields replaced], PATCH[only specified fields replaced]
+/* app.patch("/users/:id", (req, res) => {
+  const id = req.params.id;
+  const firstName = req.body.firstName;
+
+  User.findByIdAndUpdate({_id: id}, {$set: {firstName: firstName}}, {new: true})
+    .then(savedUser => {
+      res.send("User saved by patch")
+    })
+}) */
+
+/* app.put("/users/:id", (req, res) => {
+  const id = req.params.id;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+
+  User.findByIdAndUpdate({_id: id}, {$set: {firstName: firstName, lastName: lastName}}, {new: true})
+    .then(savedUser => {
+      res.send("User saved by put")
+    })
+}) */
+
+/* app.put("/users/:id", (req, res) => {  // To je alternativa prejšnjemu PUT-u
+  const id = req.params.id;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+
+  User.findOne({_id: id}).then(user => {
+    user.firstName = req.body.firstName;
+    user.lastName = req.body.lastName;
+
+    user.save().then(userSaved => {
+      res.send(userSaved);
+
+    });
+  });
+}); */
+
+/* app.delete("/users/:id", (req, res) => {  // To je alternativa prejšnjemu PUT-u
+  const id = req.params.id;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+
+  User.findOne({_id: id}).then(user => {
+    user.remove().then(userRemoved => {
+      res.send("User remove" + userRemoved);
+    });
+
+
+  });
+}); */
+
+app.delete("/users/:id", (req, res) => {  // To je alternativa prejšnjemu PUT-u
+  User.findOneAndRemove({_id: req.params.id}).then(userRemoved => {
+      res.send("User removed:" + userRemoved.firstName);
+
+
+  });
 });
 
 
 
 
-// -- READING DATA --
-  db.collection('mammals').find().toArray((err, result) => {
-    if (err) throw err
 
-    console.log(result)
-  //})
-})
+const port = 4444 || process.env.port;
 
+app.listen(port, () => {
 
-
-
+  console.log(`listening on ${port}`);
 
 });

@@ -9,6 +9,8 @@
   "author": "Matija Oblak",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.2",
     "mongodb": "^3.0.0-rc0",
     "mongoose": "^5.0.4"
   }
