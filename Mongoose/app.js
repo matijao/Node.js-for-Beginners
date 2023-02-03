@@ -96,6 +96,8 @@ app.get("/users", (req, res) => {
   });
 }); */
 
+
+// -- DELETE RECORD
 /* app.delete("/users/:id", (req, res) => {  // To je alternativa prejšnjemu PUT-u
   const id = req.params.id;
   const firstName = req.body.firstName;
@@ -110,16 +112,19 @@ app.get("/users", (req, res) => {
   });
 }); */
 
-app.delete("/users/:id", (req, res) => {  // To je alternativa prejšnjemu PUT-u
+/* app.delete("/users/:id", (req, res) => {  // To je alternativa prejšnjemu PUT-u
   User.findOneAndRemove({_id: req.params.id}).then(userRemoved => {
       res.send("User removed:" + userRemoved.firstName);
+  });
+}); */
 
-
+app.delete("/users/:id", (req, res) => {  // To je alternativa prejšnjemu PUT-u
+  User.remove({_id: req.params.id}).then(userRemoved => {
+      res.send("User removed:" + userRemoved.firstName);
   });
 });
 
-
-
+// ODM - OBJECT DOCUMENT MAPPER
 
 
 const port = 4444 || process.env.port;
