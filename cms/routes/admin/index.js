@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const User = require("../../models/Post");
+const faker = require("faker");
+
 
 router.all("/*", (req, res, next) => {   // all after "/admin"
 
@@ -17,13 +20,22 @@ router.get("/", (req, res) => {  // "/admin" je že od prej, zato tukaj ni potre
 
 });
 
-router.get("/dashboard", (req, res) => {  // "/admin" je že od prej, zato tukaj ni potreben
+router.post("/generate-fake-posts", (req, res) => {
 
-    // res.send("It works"); 
-    res.render("admin/dashboard"); // vedno gleda v VIEWS folder
+    for (let i = 0; i < req.body.amount; i++) {
 
-});
+        let post = new User();
 
+        post.title = faker.name.title();
+        post.status = "public";
+        post.allowComments = faker.random.boolean();
+        post.body = faker.lorem.sentence();
 
+        post.save(function(err){
+            if(err) throw err;
+        });
+    } 
+    res.redirect("/admin/posts");
+})
 
 module.exports = router;

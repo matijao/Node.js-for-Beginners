@@ -10,9 +10,11 @@
   "author": "Matija Oblak",
   "license": "ISC",
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
     "axios": "^0.17.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "method-override": "^2.3.10",
     "ws": "^3.3.1"
   },
   "devDependencies": {
