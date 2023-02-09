@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const Post = require("../../models/Post");
+const { isEmpty, uploadDir } = require("../../helpers/upload-helper");
+const fs = require("fs");
+const path = require("path");
+
+
+
 
 router.all("/*", (req, res, next) => {   // all after "/admin"
 
@@ -25,6 +31,23 @@ router.get("/create", (req, res) => {
 
 router.post("/create*", (req, res) => {
 
+    let filename = "IMG_20230202_202328_edit_213120010509144.jpg";
+
+    if(!isEmpty(req.files)){
+
+        let file = req.files.file;
+        filename = Date.now() + "-" + file.name;
+        let dirUploads = "./public/uploads/"
+
+        file.mv(dirUploads + filename, (err) =>{  //mv = move
+            if(err) throw err;
+
+        });
+        console.log("Is not empty");
+    }
+
+    console.log(req.files);
+
     let allowComments = true;
 
     if (req.body.allowComments){
@@ -37,19 +60,20 @@ router.post("/create*", (req, res) => {
         title: req.body.title,
         status: req.body.status,
         allowComments: allowComments,
-        body: req.body.body
+        body: req.body.body,
+        file: filename
 
     });
 
-newPost.save().then(savedPost => {
-    console.log(savedPost);
-    res.redirect("/admin/posts");
-}).catch(err => {
-    console.log("Could not save data");
-});
+    newPost.save().then(savedPost => {
+        console.log(savedPost);
+        res.redirect("/admin/posts");
+    }).catch(err => {
+        console.log("Could not save data");
+    });
 
 
-    console.log(req.body);
+    
 });
 
 
@@ -91,9 +115,16 @@ router.put("/edit/:id", (req, res) => {
 })
 
 router.delete("/:id", (req, res) => {
-    Post.remove({_id: req.params.id})
-        .then(result => {
-            res.redirect("/admin/posts");
+    Post.findOne({_id: req.params.id})
+        .then(post => {
+
+            post.remove();
+
+            fs.unlink (uploadDir + post.file, (err) => {
+                //req.flash("success_message","Post was successfully deleted");
+                res.redirect("/admin/posts");
+            })
+
     });
 })
 

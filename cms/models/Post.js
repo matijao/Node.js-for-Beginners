@@ -4,9 +4,6 @@ const Schema = mongoose.Schema;
 
 const PostSchema = new Schema ({
 
-    user:{
-    },
-
     title:{
 
         type: String,
@@ -32,6 +29,11 @@ const PostSchema = new Schema ({
 
         type: String,
         require: true
+    },
+
+    file:{
+
+        type:String
     }
 
 });

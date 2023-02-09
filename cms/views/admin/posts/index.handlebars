@@ -4,6 +4,7 @@
     <thead>
         <tr>
             <th>Id</th>
+            <th>File</th>
             <th>Title</th>
             <th>Status</th>
             <th>Allow Comments</th>
@@ -15,6 +16,8 @@
         <tr>
             <td>{{_id}}</td>
             <td>{{title}}</td>
+            <td><img height = "50"  src = "/uploads/{{file}}""></td>
+
             <td>{{status}}</td>
             <td>{{allowComments}}</td>
             <td><a href = "/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>

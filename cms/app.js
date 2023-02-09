@@ -8,13 +8,18 @@ const exphbs = require("express-handlebars");
 const {allowInsecurePrototypeAccess} = require("@handlebars/allow-prototype-access");
 const Handlebars = require("handlebars");
 const methodOverride = require("method-override");
+const upload = require("express-fileupload");
 
+
+mongoose.Promise = global.Promise;
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, "public")));
 // enginr nam omogoča, da html fajle razbijemo na več manjših (footer, nav-bar,...)
 // znotraj glavnega. Pomožni fajli morajo biti v specificirani mapi "PARTIALS(!)/home"
+
+
 
 // Set View Engine
 
@@ -24,14 +29,17 @@ const {select} = require("./helpers/handlebars-helpers"); // tukaj vzamemo le en
 app.engine("handlebars", exphbs({handlebars:allowInsecurePrototypeAccess(Handlebars),defaultLayout: "home", helpers: {select: select}}));
 app.set("view engine", "handlebars");
 
+//  Upload Midleware
+app.use(upload());
 
+// Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Method Override
 app.use(methodOverride("_method"));
 
-mongoose.Promise = global.Promise;
+
 mongoose.connect("mongodb://localhost:27017/cms", {useMongoClient: true}).then(db => {
     console.log("MONGO connected");
 }).catch(err => console.log(err));
