@@ -69,7 +69,8 @@ router.post("/create*", (req, res) => {
         console.log(savedPost);
         res.redirect("/admin/posts");
     }).catch(err => {
-        console.log("Could not save data");
+        
+        console.log(err, "could not save data");
     });
 
 

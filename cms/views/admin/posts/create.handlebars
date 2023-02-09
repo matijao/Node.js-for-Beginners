@@ -4,17 +4,17 @@
     
     <div class="form-group">
         <label for="title">Title</label>
-        <input name="title" type="text" class="form-control" id="title" placeholder="Enter title">
+        <input name="title" type="text" class="form-control" id="title" placeholder="Enter title" required>
     </div>
 
     <div class="form-group">
         <label for="file">Upload file</label>
-        <input name="file" type="file" class="form-control">
+        <input name="file" type="file" class="form-control" required>
     </div>
 
     <div class="form-group">
         <label for="title">Status</label>
-            <select name="status" class="form-control" id="statsu">
+            <select name="status" class="form-control" id="statsu" required>
                 <option value="public">Public</option>
                 <option value="private">Private</option>
                 <option value="draft">Draft</option>
@@ -23,14 +23,14 @@
 
     <div class="form-check">
         <label for="allowComments" class="form-check-label">
-        <input name="allowComments" type="checkbox" class="form-check-input" id="allowComments">
+        <input name="allowComments" type="checkbox" class="form-check-input" id="allowComments" required>
             Allow Comments
         </label>
     </div>
 
     <div class="form-group">
         <label for="body">Body</label>
-        <textarea name="body" cols="30", rows = "10" class="form-control" id="body" placeholder="Enter description">
+        <textarea name="body" cols="30", rows = "10" class="form-control" id="body" placeholder="Enter description" required>
 
         </textarea>
     </div>
