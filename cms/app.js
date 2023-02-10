@@ -9,6 +9,8 @@ const {allowInsecurePrototypeAccess} = require("@handlebars/allow-prototype-acce
 const Handlebars = require("handlebars");
 const methodOverride = require("method-override");
 const upload = require("express-fileupload");
+const session = require("express-session");
+const flash = require("connect-flash");
 
 
 mongoose.Promise = global.Promise;
@@ -39,11 +41,27 @@ app.use(bodyParser.urlencoded({extended: true}));
 // Method Override
 app.use(methodOverride("_method"));
 
-
 mongoose.connect("mongodb://localhost:27017/cms", {useMongoClient: true}).then(db => {
     console.log("MONGO connected");
 }).catch(err => console.log(err));
 
+// Sessions
+app.use(session({
+    secret: "MatijaOblak",
+    resave: true,
+    saveUninitialized: true,
+}));
+
+// Flash
+
+app.use(flash());
+
+// Local Variables using Middleware
+
+app.use((req, res, next) =>{
+    res.locals.success_message = req.flash("success_message");
+    next();
+})
 
 // Load routes
 

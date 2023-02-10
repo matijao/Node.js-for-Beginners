@@ -11,8 +11,7 @@ router.all("/*", (req, res, next) => {   // all after "/admin"
 
 router.get("/", (req, res) => {
 
-    // res.send("It works"); 
-    res.render("home/index"); // vedno gleda v VIEWS folder
+       res.render("home/index"); // vedno gleda v VIEWS folder
 
 });
 
