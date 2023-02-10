@@ -8,6 +8,7 @@ const path = require("path");
 
 
 
+
 router.all("/*", (req, res, next) => {   // all after "/admin"
 
     req.app.locals.layout = "admin";  // overwrite, če pride kdo do "/admin/*"
