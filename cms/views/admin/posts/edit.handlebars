@@ -8,14 +8,33 @@
 
     <div class="form-group">
         <label for="file">Upload file</label>
-        <input name="file" type="file" class="form-control" required>
+        <input name="file" type="file" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="title">Category</label>
+            <select name="category" class="form-control" id="status">
+
+                {{#select post.category}}
+
+                    {{#each categories}}    
+
+                        <option value="{{id}}">{{name}}</option>  
+                        <!-- Tukaj je pomembno, da je {{id}}, ki se nanaša na model Category, ki je znotraj modela Posts -->
+                   
+
+                    {{/each}}
+
+                {{/select}}
+
+            </select>
     </div>
 
     <div class="form-group">
         <label for="title">Status</label>
-            <select name="status" class="form-control" id="statsu">
+            <select name="status" class="form-control" id="status">
 
-                 {{#select post.status}}
+                {{#select post.status}}
 
                     <option value="public">Public</option>
                     <option value="private">Private</option>
