@@ -1,10 +1,10 @@
 const express = require("express");
 const Category = require("../../models/Category");
 const router = express.Router();
-//const User = require("../../models/Category");
+const { userAuthenticated } = require("../../helpers/authentication");
 
 
-router.all("/*", (req, res, next) => {   // all after "/admin"
+router.all("/*", userAuthenticated, (req, res, next) => {   // all after "/admin"
 
     req.app.locals.layout = "admin";  // overwrite, če pride kdo do "/admin/*"
     next();

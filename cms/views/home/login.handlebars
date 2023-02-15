@@ -3,11 +3,13 @@
 
     <div class="card-body">
         <form action="/login" method="post">
-            {{#if error}}
+
+            {{#if err}}
                 <div class="alert alert-danger">
-                    {{error}}
+                    {{err}}
                 </div>
             {{/if}}
+            
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input name="email" class="form-control" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" placeholder="Enter email">

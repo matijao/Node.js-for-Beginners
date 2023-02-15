@@ -11,6 +11,12 @@ const methodOverride = require("method-override");
 const upload = require("express-fileupload");
 const session = require("express-session");
 const flash = require("connect-flash");
+const {mongoDbUrl} = require("./config/database");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+
+
+
 
 
 mongoose.Promise = global.Promise;
@@ -41,7 +47,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // Method Override
 app.use(methodOverride("_method"));
 
-mongoose.connect("mongodb://localhost:27017/cms", {useMongoClient: true}).then(db => {
+mongoose.connect(mongoDbUrl, {useMongoClient: true}).then(db => {
     console.log("MONGO connected");
 }).catch(err => console.log(err));
 
@@ -56,11 +62,20 @@ app.use(session({
 
 app.use(flash());
 
+// Passport
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Local Variables using Middleware
 
 app.use((req, res, next) =>{
+    res.locals.user = req.user || null;;
     res.locals.success_message = req.flash("success_message");
     res.locals.error_message = req.flash("error_message");
+    res.locals.form_message = req.flash("form_error");
+    res.locals.error = req.flash("error");
+
     next();
 })
 

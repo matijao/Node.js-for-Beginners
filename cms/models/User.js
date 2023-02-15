@@ -20,7 +20,7 @@ const UserSchema = new Schema ({
 
     email:{
 
-        type: Boolean,
+        type: String,
         require: true
 
     },
@@ -32,6 +32,11 @@ const UserSchema = new Schema ({
     }
 
 });
+
+UserSchema.methods.testMethod = function(){
+
+};
+
 
 module.exports = mongoose.model("users", UserSchema);
 

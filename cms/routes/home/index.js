@@ -4,6 +4,9 @@ const Post = require("../../models/Post");
 const Category = require("../../models/Category");
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+
 
 router.all("/*", (req, res, next) => {   // all after "/admin"
 
@@ -36,19 +39,67 @@ router.get("/about", (req, res) => {
 
 });
 
-router.get("/about", (req, res) => {
-
-    res.render("home/about");
-
-});
-
 router.get("/login", (req, res) => {
 
     res.render("home/login");
 
 });
 
-router.get("/register", (req, res) => {
+// APP LOGIN
+
+passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done) => {
+
+    //console.log(password);
+
+    User.findOne({email: email}).then(user=>{
+
+        if(!user){
+            return done(null, false, {message: "No user found"});
+        }
+        
+
+        bcrypt.compare(password, user.password, (err, matched) => {
+            if(err) return err;
+
+            if(matched) {
+                return done(null, user);
+            } else {
+                return done(null, false, { message: "Incorrect password."});
+            }
+        });
+    })
+}));
+
+passport.serializeUser(function(user,done){
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id,done){
+    User.findById(id, function(err, user) {
+        done(err, user);
+    })
+});    
+
+router.post("/login", (req, res, next) => {
+
+    passport.authenticate("local", {
+
+        successRedirect: "/admin", //kam pošljemo userja, ki se je uspešno vpisal
+        failureRedirect: "/login",
+        failureFlash: true
+    })(req, res, next);
+
+});
+
+router.get("/logout", (req, res) => {  //ko pritisnemo logout gumb
+
+    req.logOut();
+
+    res.render("home/login");
+
+});
+
+router.get("/register", (req, res) => {  //ko pritisnemo login gumb
 
     res.render("home/register");
 
@@ -117,17 +168,8 @@ router.post("/register", (req, res) => {
 
                 req.flash("error_message", "That mail already exist. Please login.");
                 res.redirect("/login");
-
-
-
-        }});
-
-        
-
-        
+        }});  
     }
-
-    
 });
 
 router.get("/post/:id", (req, res) => {
