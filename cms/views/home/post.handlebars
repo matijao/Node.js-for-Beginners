@@ -9,7 +9,7 @@
           <!-- Author -->
           <p class="lead">
             by
-            <a href="#">Start Bootstrap</a>
+            <a href="#"> {{post.user.firstName}} </a>
           </p>
 
           <hr>
@@ -29,20 +29,86 @@
 
           <hr>
 
-          <!-- Comments Form -->
-          <div class="card my-4">
-            <h5 class="card-header">Leave a Comment:</h5>
-            <div class="card-body">
-              <form>
-                <div class="form-group">
-                  <textarea class="form-control" rows="3"></textarea>
+
+          {{#if user}}
+            {{#if post.allowComments}}
+
+            <!-- Comments Form -->
+            <div class="card my-4">
+              <h5 class="card-header">Leave a Comment:</h5>
+              <div class="card-body">
+                <form action="/admin/comments" method="post">
+                  <div class="form-group">
+                    <textarea class="form-control" name="body" rows="3"></textarea>
+
+                    <input type="hidden" name="id" value="{{post.id}}">
+
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+              </div>
+            </div>
+          
+
+          {{else}}
+
+          <h3>Comments not allowed for this post</h3>
+            <br>
+            <hr>
+
+          {{/if}}
+
+          {{else}}
+
+            You need to login! <a href="/login">Login</a>
+            <br>
+            <hr>
+
+          {{/if}}
+
+
+          {{#each post.comments}}
+          <!-- Single Comment -->
+            <div class="media mb-4">
+              <img class="d-flex mr-3 rounded-circle" src="https://via.placeholder.com/50" alt="">
+              <div class="media-body">
+                <h5 class="mt-0">{{user.firstName}} {{user.lastName}}</h5>
+                  {{body}}
+              </div>
+            </div>
+
+          {{/each}}
+
+          
+          <!-- Comment with nested comments -->
+          <!-- <div class="media mb-4">
+            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+            <div class="media-body">
+              <h5 class="mt-0">Commenter Name</h5>
+              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+
+              <div class="media mt-4">
+                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+                <div class="media-body">
+                  <h5 class="mt-0">Commenter Name</h5>
+                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
+              </div>
+
+              <div class="media mt-4">
+                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+                <div class="media-body">
+                  <h5 class="mt-0">Commenter Name</h5>
+                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                </div>
+              </div>
+
             </div>
           </div>
-        </div>
 
+          </div>
+          -->
+        </div>
         <!-- Sidebar Widgets Column -->
         {{> home/sidebar}}  <!-- Definiramo, kje se nahaja ta fajl: views/home/sidebar -->
 

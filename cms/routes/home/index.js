@@ -174,10 +174,16 @@ router.post("/register", (req, res) => {
 
 router.get("/post/:id", (req, res) => {
 
-    Post.findOne({_id: req.params.id}).then(post => {
+    // Post.findOne({_id: req.params.id}).populate("comments") ČE ŽELIMO UVOZITI V POST SAMO KOMENTARJE
+    Post.findOne({_id: req.params.id})
+    .populate({path: "comments", populate: {path: "user", model: "users"}}) // TUKAJ JE V COMMENT ELEMENT V POST, USER PA JE ELEMENT V COMMENTU (avtor komentarja)
+    .populate("user") // TUKAJ GRE ZA AVTORJA OBJAVE
+    
+    .then(post => { 
+        console.log(post);
         Category.find({}).then(categories => {
 
-            res.render("home/post", {post: post, categories: categories})
+            res.render("home/post", {post: post, categories: categories});
 
         });
     });

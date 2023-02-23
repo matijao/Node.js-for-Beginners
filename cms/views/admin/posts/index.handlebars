@@ -14,26 +14,26 @@
 
     <tbody>
         {{#each posts}}
-        <tr>
-            <td>{{_id}}</td>
-            <td>{{title}}</td>
-            <td><img height = "50"  src = "/uploads/{{file}}"></td>
-            <td>{{status}}</td>
-            <td>{{category.name}}</td>
-            <td>{{allowComments}}</td>
-            <td>{{generateDate date "DD MMMM YYYY"}}</td>
-            <td><a href = "/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>
-            <td>
-                <form action="/admin/posts/{{id}}?_method=DELETE" method="post">
-                    <button type="submit" class="btn btn-danger">
-                        DELETE
-                    </button>
-                </form>
-
-
-
-            </td>
-        </tr>
+            <tr>
+                <td>{{_id}}</td>
+                <td>{{title}}</td>
+                <td><img height = "50"  src = "/uploads/{{file}}"></td>
+                <td>{{status}}</td>
+                <td>{{category.name}}</td>
+                <td>{{allowComments}}</td>
+                <td>{{generateDate date "DD MMMM YYYY"}}</td>
+                <td><a href = "/post/{{id}}" class="btn btn-primary">View</a></td>
+                <!--
+                <td><a href = "/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>
+                <td>
+                    <form action="/admin/posts/{{id}}?_method=DELETE" method="post">
+                        <button type="submit" class="btn btn-danger">
+                            DELETE
+                        </button>
+                    </form>
+                </td>
+                -->
+            </tr>
         {{/each}}
     </tbody>
 </table>
