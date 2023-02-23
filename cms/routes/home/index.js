@@ -176,7 +176,7 @@ router.get("/post/:id", (req, res) => {
 
     // Post.findOne({_id: req.params.id}).populate("comments") ČE ŽELIMO UVOZITI V POST SAMO KOMENTARJE
     Post.findOne({_id: req.params.id})
-    .populate({path: "comments", populate: {path: "user", model: "users"}}) // TUKAJ JE V COMMENT ELEMENT V POST, USER PA JE ELEMENT V COMMENTU (avtor komentarja)
+    .populate({path: "comments", match: {approveComment: true}, populate: {path: "user", model: "users"}}) // TUKAJ JE V COMMENT ELEMENT V POST, USER PA JE ELEMENT V COMMENTU (avtor komentarja)
     .populate("user") // TUKAJ GRE ZA AVTORJA OBJAVE
     
     .then(post => { 

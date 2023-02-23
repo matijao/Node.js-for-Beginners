@@ -18,6 +18,13 @@ const CommentSchema = new Schema ({
 
     },
 
+    approveComment: {
+
+        type: Boolean,
+        default: false
+
+    },
+
     date:{
 
         type: Date,

@@ -13,6 +13,7 @@ router.all("/*", (req, res, next) => {   // all after "/admin"
 
 router.get("/",(req, res) => {
 
+    // Comment.find({user: "63f0e019d239a225442bee5e"}).populate("user") //samo za testiranje
     Comment.find({user: req.user.id}).populate("user")
     
         .then(comments => {
@@ -42,6 +43,8 @@ router.post("/",(req, res) => {
         post.save().then(savedPost => {
 
             newComment.save().then(savedComment => {
+
+                req.flash("success_message", "Comment will be reviewed very soon");
 
                 res.redirect(`/post/${post.id}`);
 
@@ -73,5 +76,18 @@ router.delete("/:id", (req, res) => {
 
     });
 })
+
+router.post("/approve-comment", (req, res) => {
+
+    Comment.findByIdAndUpdate(req.body.id, {$set: {approveComment: req.body.approveComment}}, (err, result) => {
+
+        if (err) return err;
+
+        res.send(result);
+
+    })
+
+});
+
 
 module.exports = router;
