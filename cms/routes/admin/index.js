@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../../models/Post");
+const Post = require("../../models/Post");
+const User = require("../../models/User");
+const Comment = require("../../models/Comment");
+const Category = require("../../models/Category");
 const faker = require("faker");
 const { userAuthenticated } = require("../../helpers/authentication");
 
@@ -16,9 +19,19 @@ router.all("/*", userAuthenticated, (req, res, next) => {   // all after "/admin
 
 router.get("/", (req, res) => {  // "/admin" je že od prej, zato tukaj ni potreben
 
-    // res.send("It works"); 
-    res.render("admin/index"); // vedno gleda v VIEWS folder
+    Post.count().then(postCount => {
+        Comment.count().then(commentCount => {
+            User.count().then(userCount => {
+                Category.count().then(categoryCount => {
 
+
+                    // res.send("It works"); 
+                    res.render("admin/index", {postCount: postCount, commentCount: commentCount, userCount: userCount,categoryCount: categoryCount}); // vedno gleda v VIEWS folder
+                    console.log([{postCount: postCount}, {commentCount: commentCount},{userCount: userCount},{categoryCount: categoryCount}]);
+                });
+            });
+        });
+    });
 });
 
 router.post("/generate-fake-posts", (req, res) => {
