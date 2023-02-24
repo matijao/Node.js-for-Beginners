@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const URLSlugs = require("mongoose-url-slugs");
+
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema ({
@@ -22,6 +24,12 @@ const PostSchema = new Schema ({
 
         type: String,
         require: true
+
+    },
+
+    slug: {
+
+        type: String
 
     },
 
@@ -66,6 +74,10 @@ const PostSchema = new Schema ({
 
 }, {usePushEach: true});
 
+PostSchema.plugin(URLSlugs("title", {field: "slug"}));
+// kreira Slug glede na ime, če sta dva enaka imena, doda še inkrementalno cifro
+
 module.exports = mongoose.model("posts", PostSchema);
 
 // v bazi se kreira tabela v množini Post -> Posts, če ni že prej v množini
+

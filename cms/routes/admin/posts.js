@@ -63,7 +63,7 @@ router.post("/create*", (req, res) => {
         console.log("Is not empty");
     }
 
-    console.log(req.files);
+    //console.log(req.files);
 
     let allowComments = true;
 
@@ -102,9 +102,9 @@ router.post("/create*", (req, res) => {
 });
 
 
-router.get("/edit/:id", (req, res) => {
+router.get("/edit/:slug", (req, res) => {
 
-    Post.findOne({_id: req.params.id}).then(post => {
+    Post.findOne({slug: req.params.slug}).then(post => {
         Category.find({}).then(categories => {
 
             res.render("admin/posts/edit", {post: post, categories: categories});
@@ -116,11 +116,11 @@ router.get("/edit/:id", (req, res) => {
 });
 
 
-router.put("/edit/:id", (req, res) => {
+router.put("/edit/:slug", (req, res) => {
 
     //res.send("It workss");
 
-    Post.findOne({_id: req.params.id}).then(post => {
+    Post.findOne({slug: req.params.slug}).then(post => {
 
         if (req.body.allowComments){
             allowComments = true;
@@ -157,8 +157,8 @@ router.put("/edit/:id", (req, res) => {
         });
 })
 
-router.delete("/:id", (req, res) => {
-    Post.findOne({_id: req.params.id})
+router.delete("/:slug", (req, res) => {
+    Post.findOne({slug: req.params.slug})
         .populate("comments")
         .then(post => {
 
