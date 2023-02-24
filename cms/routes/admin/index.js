@@ -27,7 +27,7 @@ router.get("/", (req, res) => {  // "/admin" je že od prej, zato tukaj ni potre
 
                     // res.send("It works"); 
                     res.render("admin/index", {postCount: postCount, commentCount: commentCount, userCount: userCount,categoryCount: categoryCount}); // vedno gleda v VIEWS folder
-                    console.log([{postCount: postCount}, {commentCount: commentCount},{userCount: userCount},{categoryCount: categoryCount}]);
+                    //console.log([{postCount: postCount}, {commentCount: commentCount},{userCount: userCount},{categoryCount: categoryCount}]);
                 });
             });
         });
@@ -38,15 +38,19 @@ router.post("/generate-fake-posts", (req, res) => {
 
     for (let i = 0; i < req.body.amount; i++) {
 
-        let post = new User();
+        let post = new Post();
 
         post.title = faker.name.title();
         post.status = "public";
         post.allowComments = faker.random.boolean();
         post.body = faker.lorem.sentence();
+        post.slug = post.title;
+
+       
 
         post.save(function(err){
-            if(err) throw err;
+            if(err) return err;
+            console.log(err);
         });
     } 
     res.redirect("/admin/posts");
