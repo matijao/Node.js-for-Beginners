@@ -19,7 +19,22 @@ router.all("/*", userAuthenticated, (req, res, next) => {   // all after "/admin
 
 router.get("/", (req, res) => {  // "/admin" je že od prej, zato tukaj ni potreben
 
-    Post.count().then(postCount => {
+    const promises = [
+        Post.count().exec(),
+        Category.count().exec(),
+        Comment.count().exec(),
+        User.count().exec()
+    ];
+
+    Promise.all(promises).then(([postCount, categoryCount, commentCount, userCount]) => {
+        res.render("admin/index", {postCount: postCount, categoryCount: categoryCount, commentCount: commentCount, userCount: userCount});
+    });
+
+    
+    
+    
+    // HARD WAY
+    /*Post.count().then(postCount => {
         Comment.count().then(commentCount => {
             User.count().then(userCount => {
                 Category.count().then(categoryCount => {
@@ -31,7 +46,7 @@ router.get("/", (req, res) => {  // "/admin" je že od prej, zato tukaj ni potre
                 });
             });
         });
-    });
+    });*/
 });
 
 router.post("/generate-fake-posts", (req, res) => {

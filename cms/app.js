@@ -28,10 +28,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Set View Engine
 
-const {select, generateDate} = require("./helpers/handlebars-helpers"); // tukaj vzamemo le eno funkcijo
+const {select, generateDate, paginate} = require("./helpers/handlebars-helpers"); // tukaj vzamemo le eno funkcijo
 //app.engine("handlebars", exphbs(config:{handlebars:allowInsecurePrototypeAccess(Handlebars),defaultLayout: "home"}));
 
-app.engine("handlebars", exphbs({handlebars:allowInsecurePrototypeAccess(Handlebars),defaultLayout: "home", helpers: {select: select, generateDate: generateDate}}));
+app.engine("handlebars", exphbs({handlebars:allowInsecurePrototypeAccess(Handlebars),defaultLayout: "home", helpers: {select: select, generateDate: generateDate, paginate: paginate}}));
 app.set("view engine", "handlebars");
 
 //  Upload Midleware
