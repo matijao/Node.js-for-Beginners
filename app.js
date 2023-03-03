@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const path = require("path");
 const exphbs = require("express-handlebars");
+const {mongoDbUrl} = require("/.config/database");
 
 const app = express();
 
@@ -23,7 +24,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost:27017/cms", {useMongoClient: true}).then(db => {
+mongoose.connect("mmongoDbUrl").then(db => {
+//mongoose.connect("mmongoDbUrl", {useMongoClient: true}).then(db => {
     console.log("MONGO connected");
 }).catch(err => console.log(err));
 
@@ -40,8 +42,8 @@ app.use("/", home);
 app.use("/admin", admin);
 app.use("/admin/posts", posts);
 
+const port = process.env.port || 4500;
 
-
-app.listen(4500, () => {
-    console.log(`listening on port 4500`);
+app.listen(port, () => {
+    console.log(`listening on port ${port}`);
 });
